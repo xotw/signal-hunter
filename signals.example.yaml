@@ -1,0 +1,200 @@
+# Signal Hunter - Signal Configuration
+# Customize this file for your use case
+#
+# Signal types:
+#   - trigger: High intent signals (act immediately)
+#   - context: Opportunity signals (good timing)
+#   - negative: Risk signals (caution/disqualify)
+#
+# Match modes:
+#   - any: Match if ANY keyword found
+#   - all: Match if ALL keywords found
+#   - competitor_deployment: Match competitor + action term
+
+name: "SaaS Sales Signals"
+description: "Detect buying signals for B2B SaaS sales"
+
+signals:
+  # ============================================
+  # TRIGGERS - High Intent, Call Now
+  # ============================================
+
+  trig_funding:
+    type: trigger
+    description: "Company raised funding - budget available"
+    keywords:
+      - "series A"
+      - "series B"
+      - "series C"
+      - "raised funding"
+      - "funding round"
+      - "venture capital"
+      - "investment round"
+      - "secures funding"
+      - "closes round"
+      - "million funding"
+    match: any
+
+  trig_expansion:
+    type: trigger
+    description: "Company expanding - hiring, new offices"
+    keywords:
+      - "hiring spree"
+      - "rapid growth"
+      - "new office"
+      - "expanding team"
+      - "doubling headcount"
+      - "opens office"
+      - "expands to"
+      - "international expansion"
+    match: any
+
+  trig_leadership_change:
+    type: trigger
+    description: "New C-suite executive"
+    keywords:
+      - "new CEO"
+      - "new CTO"
+      - "new CFO"
+      - "new CMO"
+      - "new CRO"
+      - "appointed CEO"
+      - "names new chief"
+      - "joins as CEO"
+      - "leadership change"
+    match: any
+
+  trig_pain_signal:
+    type: trigger
+    description: "Public pain point mentioned"
+    keywords:
+      - "struggling with"
+      - "challenges with"
+      - "looking for solution"
+      - "need to improve"
+      - "pain point"
+      - "bottleneck"
+      - "inefficient process"
+    match: any
+
+  # ============================================
+  # CONTEXT - Opportunity Signals
+  # ============================================
+
+  ctx_tech_adoption:
+    type: context
+    description: "Company adopting new tech"
+    keywords:
+      - "digital transformation"
+      - "modernizing"
+      - "tech stack"
+      - "migration to"
+      - "adopting"
+      - "implementing"
+      - "upgrading systems"
+    match: any
+
+  ctx_product_launch:
+    type: context
+    description: "Launching new product/feature"
+    keywords:
+      - "launches"
+      - "announces"
+      - "new product"
+      - "new feature"
+      - "product release"
+      - "going live"
+    match: any
+
+  ctx_partnership:
+    type: context
+    description: "New partnership announced"
+    keywords:
+      - "partners with"
+      - "partnership"
+      - "collaboration"
+      - "strategic alliance"
+      - "joint venture"
+      - "integration with"
+    match: any
+
+  ctx_award:
+    type: context
+    description: "Won award or recognition"
+    keywords:
+      - "wins award"
+      - "recognized"
+      - "named top"
+      - "best in"
+      - "award winner"
+      - "certified"
+    match: any
+
+  ctx_conference:
+    type: context
+    description: "Speaking at or attending conference"
+    keywords:
+      - "speaking at"
+      - "presenting at"
+      - "attending"
+      - "keynote"
+      - "conference"
+      - "summit"
+      - "event"
+    match: any
+
+  # ============================================
+  # NEGATIVE - Risk Signals
+  # ============================================
+
+  neg_competitor:
+    type: negative
+    description: "Using a competitor"
+    competitors:
+      - "Competitor1"
+      - "Competitor2"
+      - "Competitor3"
+    deployment_terms:
+      - "uses"
+      - "implements"
+      - "partners with"
+      - "chooses"
+      - "signs with"
+      - "deploys"
+    match: competitor_deployment
+
+  neg_layoffs:
+    type: negative
+    description: "Company doing layoffs"
+    keywords:
+      - "layoffs"
+      - "job cuts"
+      - "downsizing"
+      - "restructuring"
+      - "workforce reduction"
+      - "letting go"
+    match: any
+
+  neg_financial_trouble:
+    type: negative
+    description: "Financial difficulties"
+    keywords:
+      - "bankruptcy"
+      - "insolvent"
+      - "shutting down"
+      - "closing"
+      - "cash crunch"
+      - "defaulting"
+    match: any
+
+# Scoring weights for lead prioritization
+scoring:
+  trigger_weight: 30
+  context_weight: 10
+  negative_weight: -20
+
+  tiers:
+    hot: 50        # >= 50 points
+    warm: 30       # >= 30 points
+    cool: 10       # >= 10 points
+    cold: 0        # < 10 points
